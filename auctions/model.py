@@ -42,16 +42,16 @@ class AuctionHouse(Model):
         """ 
         AGENTS:
         -> Agents have a maxBid value generated from a normal distribution with properties:
-        ---> Mean = 100, standard dev. = maxValueStandardDeviation
+        ---> Mean = 1000, standard dev. = maxValueStandardDeviation
 
         -> Agents have a valuation value generated from a normal distribution with properties:
-        ---> Mean = 100 - maxValueStandardDeviation, standard dev. = maxValueStandardDeviation
+        ---> Mean = 500, standard dev. = maxValueStandardDeviation
         """
 
         # Creating auctioneer agent
         self.auctioneer: Agent = Auctioneer(0, self)
         self.schedule.add(self.auctioneer)
-        print("Agent 0")
+        print("INITIALISING\nAgent: 0 ::: Auctioneer")
 
         # Creating early bidder agents
         for i in range(self.earlyBidders):
@@ -60,7 +60,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent: {i+1}')
+            print(f'Agent: {i+1} ::: EarlyBidder')
             a = EarlyBidder(i+1, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba)
             self.schedule.add(a)
 
@@ -71,7 +71,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent {i+1+self.earlyBidders}')
+            print(f'Agent: {i+1+self.earlyBidders} ::: SniperBidder')
             a = SniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)
             self.schedule.add(a)
 
