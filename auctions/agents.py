@@ -8,50 +8,41 @@ class Auctioneer(Agent):
     def __init__(self, unique_id, model):
         # Initialise the parent class with required parameters
         super().__init__(unique_id, model)
-        self.highestBid: int = 0
-        self.highestBidder: Bidder = None
-        self.secondHighestBid: int = 0
-        self.secondHighestBidder: Bidder = None
-        self.bids: defaultdict = {} # Bidder-bid pair
-        self.currentTime: int = 1
+        self.bidHistory: list = [] # List of tuples, e.g., (Agent, valuation): (Bidder, int)
+        self.bids: list = [] # List to hold bids sent by agents _during_ a step
 
     def step(self):
-        if (not len(self.bids) == 0):
-            # Finding highest Bidder-bid pair
-            highBidder = max(self.bids, key=self.bids.get)
-            highBid = self.bids[highBidder]
+        self.bidHistory += self.bids
+        self.sortBids()
+        self.bids = [] # Resetting for next step
 
-            # Checking if there's a new highest bidder
-            if (highBid > self.highestBid):
-                self.highestBidder = highBidder
-                self.highestBid = highBid
-                self.highestBidder.isHighestBidder = True # Letting the highest bidder know they are the highest bidder
-            elif (highBid > self.secondHighestBid): # Checking if there's a new second highest bidder
-                self.secondHighestBidder = highBidder
-                self.secondHighestBid = highBid
-            
-            # Removing highest Bidder-bid pair from dictionary
-            self.bids.pop(highBidder)
+    def sortBids(self) -> list:
+        # Sorted by second item in each tuple (in descending order)
+        return sorted(self.bidHistory, key=lambda x: x[1], reverse=True)
 
-            if (not len(self.bids) == 0):
-                # Finding second highest Bidder-bid pair
-                secondHighBidder = max(self.bids, key=self.bids.get)
-                secondHighBid = self.bids[secondHighBidder]
+    def getHighestBid(self) -> int:
+        if len(self.bidHistory) < 1:
+            return 0
 
-                if (secondHighBid > self.secondHighestBid):
-                    self.secondHighestBidder = secondHighBidder
-                    self.secondHighBid = secondHighBid
-            
-            # Resetting bids dictionary for next step
-            self.bids = {}
+        return self.bidHistory[0][1]
 
-        self.currentTime += 1
+    def getHighestBidder(self) -> Bidder:
+        if len(self.bidHistory) < 1:
+            return None
 
-    def sortBids(bidList) -> list:
-        pass
+        return self.bidHistory[0][0]
 
     def getSecondHighestBid(self) -> int:
-        return self.secondHighestBid
+        if len(self.bidHistory) < 2:
+            return self.getHighestBid()
+
+        return self.bidHistory[1][1]
+
+    def getSecondHighestBidder(self) -> Bidder:
+        if len(self.bidHistory) < 2:
+            return self.getHighestBidder()
+
+        return self.bidHistory[1][0]
 
 """
 Properties of bidder classes:
@@ -82,7 +73,7 @@ class EarlyBidder(Bidder):
                     proba = np.random.uniform()
                     if (proba < self.bidProba):
                         # Submit with probability = self.bidProba
-                        self.auctioneer.bids[self] = self.valuation
+                        self.auctioneer.bids.append((self, self.valuation))
                         print(f'Submitting bid: {self.valuation} (early bidder)')
 
 class SniperBidder(Bidder):
@@ -105,5 +96,7 @@ class SniperBidder(Bidder):
                 proba = np.random.uniform()
                 if (proba < self.bidProba):
                     # Submit bid if probability < bidProba
-                    self.auctioneer.bids[self] = self.valuation
+                    self.auctioneer.bids.append((self, self.valuation))
+                    print(f'Submitting bid: {self.valuation} (sniper bidder)')
+
         self.currentTime += 1

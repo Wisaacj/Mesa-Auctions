@@ -7,16 +7,16 @@ from auctions.schedulers import RandomActivationByType
 import numpy as np
 
 def getHighestBid(model) -> int:
-    return model.auctioneer.highestBid
+    return model.auctioneer.getHighestBid()
 
 def getHighestBidder(model) -> Bidder:
-    return model.auctioneer.highestBidder
+    return model.auctioneer.getHighestBidder()
 
 def getSecondHighestBid(model) -> int:
-    return model.auctioneer.secondHighestBid
+    return model.auctioneer.getSecondHighestBid()
 
 def getSecondHighestBidder(model) -> Bidder:
-    return model.auctioneer.secondHighestBidder
+    return model.auctioneer.getSecondHighestBidder()
 
 class AuctionHouse(Model):
 
@@ -51,6 +51,7 @@ class AuctionHouse(Model):
         # Creating auctioneer agent
         self.auctioneer: Agent = Auctioneer(0, self)
         self.schedule.add(self.auctioneer)
+        print("First agent")
 
         # Creating early bidder agents
         for i in range(self.earlyBidders):
@@ -59,6 +60,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 100 - maxBidStandardDeviation
             valuation = np.random.normal(100-self.maxValueStandardDeviation, self.maxValueStandardDeviation)
 
+            print(f'Agent {i+1}')
             a = EarlyBidder(i+1, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba)
             self.schedule.add(a)
 
@@ -69,6 +71,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 100 - maxBidStandardDeviation
             valuation = np.random.normal(100-self.maxValueStandardDeviation, self.maxValueStandardDeviation)
 
+            print(f'Agent {i+1+self.earlyBidders}')
             a = SniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)
             self.schedule.add(a)
 
