@@ -10,4 +10,4 @@
 ## IDEAS
 
 1. Have different bid and watch probabilties for the different types of agents
-- Maybe generate their bid/watch probabilities from a normal distribution??
+     Maybe generate their bid/watch probabilities from a normal distribution??
