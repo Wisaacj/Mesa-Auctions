@@ -51,25 +51,25 @@ class AuctionHouse(Model):
         # Creating auctioneer agent
         self.auctioneer: Agent = Auctioneer(0, self)
         self.schedule.add(self.auctioneer)
-        print("First agent")
+        print("Agent 0")
 
         # Creating early bidder agents
         for i in range(self.earlyBidders):
-            # Generating normally-distributed maxBid with mean = 100
-            maxBid = np.random.normal(100, self.maxValueStandardDeviation)
-            # Generating normally-distributed private valuation with mean = 100 - maxBidStandardDeviation
-            valuation = np.random.normal(100-self.maxValueStandardDeviation, self.maxValueStandardDeviation)
+            # Generating normally-distributed maxBid with mean = 1000
+            maxBid = np.random.normal(1000, self.maxValueStandardDeviation)
+            # Generating normally-distributed private valuation with mean = 500
+            valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent {i+1}')
+            print(f'Agent: {i+1}')
             a = EarlyBidder(i+1, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba)
             self.schedule.add(a)
 
         # Creating sniper bidder agents
         for i in range(self.snipers):
-            # Generating normally-distributed maxBid with mean = 100
-            maxBid = np.random.normal(100, self.maxValueStandardDeviation)
-            # Generating normally-distributed private valuation with mean = 100 - maxBidStandardDeviation
-            valuation = np.random.normal(100-self.maxValueStandardDeviation, self.maxValueStandardDeviation)
+            # Generating normally-distributed maxBid with mean = 1000
+            maxBid = np.random.normal(1000, self.maxValueStandardDeviation)
+            # Generating normally-distributed private valuation with mean = 500
+            valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
             print(f'Agent {i+1+self.earlyBidders}')
             a = SniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)

@@ -13,13 +13,13 @@ class Auctioneer(Agent):
 
     def step(self):
         self.bidHistory += self.bids
-        self.sortBids()
+        self.bidHistory = self.sortBids()
         print(f'Second Highest Bid: {self.getSecondHighestBid()}')
         self.bids = [] # Resetting for next step
 
     def sortBids(self) -> list:
         # Sorted by second item in each tuple (in descending order)
-        return sorted(self.bidHistory, key=lambda x: x[1])
+        return sorted(self.bidHistory, key=lambda x: x[1], reverse=True)
 
     def getHighestBid(self) -> int:
         if len(self.bidHistory) < 1:
@@ -66,7 +66,7 @@ class EarlyBidder(Bidder):
         if (prob_watch < self.watchProba):
             # If outbid at current timestep
             if (self.valuation < secondHighestBid or secondHighestBid == 0):
-                scalar = np.random.uniform(1.2, 2.0)
+                scalar = np.random.uniform(1.0, 1.2)
                 # Update private valuation (by multiplying by scalar drawn from uniform distribution)
                 self.valuation = min(scalar * self.valuation, self.maxBid)
                 if (self.valuation > secondHighestBid):
@@ -92,12 +92,13 @@ class SniperBidder(Bidder):
         if (prob_watch < self.watchProba):
             if (self.auctionLength - self.currentTime < self.bidTimeframe):
                 # Final bidTimeframe steps of the auction (snipers activated)
-                self.valuation = min(self.auctioneer.getSecondHighestBid() * 2, self.maxBid) # Update private valuation
-                # Generate probability (from uniform distribution)
-                proba = np.random.uniform()
-                if (proba < self.bidProba):
-                    # Submit bid if probability < bidProba
-                    self.auctioneer.bids.append((self, self.valuation))
-                    print(f'Submitting bid: {self.valuation} (sniper bidder)')
+                if (self.valuation < self.auctioneer.getSecondHighestBid()):
+                    self.valuation = min(self.auctioneer.getSecondHighestBid() * 2, self.maxBid) # Update private valuation
+                    # Generate probability (from uniform distribution)
+                    proba = np.random.uniform()
+                    if (proba < self.bidProba):
+                        # Submit bid if probability < bidProba
+                        self.auctioneer.bids.append((self, self.valuation))
+                        print(f'Submitting bid: {self.valuation} (sniper bidder)')
 
         self.currentTime += 1

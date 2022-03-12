@@ -12,7 +12,7 @@ model_params = {
         "slider", "Early Bidders", 7, 1, 20, description="Number of early (conventional) bidders"
     ),
     "maxValueStandardDeviation": UserSettableParameter(
-        "slider", "Strd Dev. Agents", 15, 1, 25, description="Standard deviation of bidders' internal valuations / max bids"
+        "slider", "Strd Dev. Agents", 150, 0, 350, description="Standard deviation of bidders' internal valuations / max bids"
     ),
     "bidProba": UserSettableParameter(
         "slider", "Bid Probability", 0.5, 0, 1, 0.05, description="Bid Probability"
