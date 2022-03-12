@@ -24,7 +24,7 @@ model_params = {
         "slider", "Sniper Activation Window", 7, 1, 20, description="Window of time (from end of auction) where the snipers are active"
     ),
     "auctionLength": UserSettableParameter(
-        "slider", "Auction Length", 7, 1, 20, description="Length of Auction"
+        "slider", "Auction Length", 100, 50, 200, description="Length of Auction"
     ),
 }
 

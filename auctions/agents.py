@@ -14,11 +14,12 @@ class Auctioneer(Agent):
     def step(self):
         self.bidHistory += self.bids
         self.sortBids()
+        print(f'Second Highest Bid: {self.getSecondHighestBid()}')
         self.bids = [] # Resetting for next step
 
     def sortBids(self) -> list:
         # Sorted by second item in each tuple (in descending order)
-        return sorted(self.bidHistory, key=lambda x: x[1], reverse=True)
+        return sorted(self.bidHistory, key=lambda x: x[1])
 
     def getHighestBid(self) -> int:
         if len(self.bidHistory) < 1:
