@@ -2,13 +2,12 @@
 
 ## Design
 
-1. maxBid drawn from a normal distribution with mean = 100, standard deviation = (user inputted)
+1. maxBid drawn from a normal distribution with mean = 1000, standard deviation = (user inputted)
+2. valuation drawn from a normal distribution with mean = 500
+3. EarlyBidder bids are updated by a scalar factor drawn from uniform distribution [1.0, 1.2] --- min(self.valuation * scalar, self.valuation)
+4. SniperBidder bids are updated by a factor of 1.5 --- min(self.valuation * 1.5, self.maxBid)
 
 ## IDEAS
 
 1. Have different bid and watch probabilties for the different types of agents
 - Maybe generate their bid/watch probabilities from a normal distribution??
-
-## Conundrums
-
-1. How do we select private valuation relative to max bid? (for each agent)
