@@ -90,3 +90,4 @@ class AuctionHouse(Model):
     def run_model(self):
         for i in range(self.auctionLength):
             self.step()
+        return

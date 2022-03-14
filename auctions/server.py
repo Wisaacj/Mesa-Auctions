@@ -15,10 +15,10 @@ model_params = {
         "slider", "Strd Dev. Agents", 150, 0, 350, description="Standard deviation of bidders' internal valuations / max bids"
     ),
     "bidProba": UserSettableParameter(
-        "slider", "Bid Probability", 0.5, 0, 1, 0.05, description="Bid Probability"
+        "slider", "Bid Probability", 0.75, 0, 1, 0.05, description="Bid Probability"
     ),
     "watchProba": UserSettableParameter(
-        "slider", "Watch Probability", 0.5, 0, 1, 0.05, description="Number of early (conventional) bidders"
+        "slider", "Watch Probability", 0.75, 0, 1, 0.05, description="Number of early (conventional) bidders"
     ),
     "bidTimeframe": UserSettableParameter(
         "slider", "Sniper Activation Window", 7, 1, 20, description="Window of time (from end of auction) where the snipers are active"
