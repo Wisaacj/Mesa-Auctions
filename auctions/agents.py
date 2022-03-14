@@ -93,7 +93,9 @@ class SniperBidder(Bidder):
             if (self.auctionLength - self.currentTime < self.bidTimeframe):
                 # Final bidTimeframe steps of the auction (snipers activated)
                 if (self.valuation < self.auctioneer.getSecondHighestBid()):
-                    self.valuation = min(self.auctioneer.getSecondHighestBid() * 2, self.maxBid) # Update private valuation
+                    scalar = np.random.uniform(1.0, 2.0)
+                    # Update private valuation (by multiplying by scalar drawn from uniform distribution) note this distribution has a larger range than the one used for EarlyBidder
+                    self.valuation = min(self.auctioneer.getSecondHighestBid() * scalar, self.maxBid) # Update private valuation
                     # Generate probability (from uniform distribution)
                     proba = np.random.uniform()
                     if (proba < self.bidProba):
