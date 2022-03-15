@@ -13,14 +13,14 @@ class Auctioneer(Agent):
         self.averageBidIncrease = 0
 
     def step(self):
-        self.bidIncrese() # calculate new bid increase
+        self.bidIncrease() # calculate new bid increase
         self.bidHistory += self.bids
         print(type(self.bids))
         self.bidHistory = self.sortBids()
         print(f'Second Highest Bid: {self.getSecondHighestBid()}')
         self.bids = [] # Resetting for next step
 
-    def bidIncrese(self):
+    def bidIncrease(self):
         #  if first bid(s) to be added
         if len(self.bids) !=0:
             if len(self.bidHistory) == 0:
