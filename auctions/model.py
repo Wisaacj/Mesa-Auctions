@@ -9,14 +9,14 @@ import numpy as np
 def getHighestBid(model) -> int:
     return model.auctioneer.getHighestBid()
 
-def getHighestBidder(model) -> Bidder:
-    return model.auctioneer.getHighestBidder()
+def getHighestBidder(model) -> str:
+    return str(model.auctioneer.getHighestBidder())
 
 def getSecondHighestBid(model) -> int:
     return model.auctioneer.getSecondHighestBid()
 
-def getSecondHighestBidder(model) -> Bidder:
-    return model.auctioneer.getSecondHighestBidder()
+def getSecondHighestBidder(model) -> str:
+    return str(model.auctioneer.getSecondHighestBidder())
 
 class AuctionHouse(Model):
 
@@ -29,6 +29,8 @@ class AuctionHouse(Model):
         self.bidTimeframe: int = bidTimeframe
         self.auctionLength: int = auctionLength
         self.schedule: BaseScheduler = RandomActivationByType(self)
+        self.running: bool = True
+        self.steps: int = 0
 
         self.datacollector = DataCollector(
             model_reporters = {
@@ -86,7 +88,12 @@ class AuctionHouse(Model):
         self.schedule.step_type(Auctioneer)
         # Collect data
         self.datacollector.collect(self)
+        # Manual override (as run_model() is not being called)
+        self.steps += 1
+        if (self.steps >= self.auctionLength):
+            self.running=False
 
     def run_model(self):
         for i in range(self.auctionLength):
             self.step()
+        self.running = False

@@ -12,10 +12,12 @@ class Auctioneer(Agent):
         self.bids: list = [] # List to hold bids sent by agents _during_ a step
         self.averageBidIncrease = 0
 
+    def __str__(self):
+        return "Auctioneer"
+
     def step(self):
         self.bidIncrease() # calculate new bid increase
         self.bidHistory += self.bids
-        print(type(self.bids))
         self.bidHistory = self.sortBids()
         print(f'Second Highest Bid: {self.getSecondHighestBid()}')
         self.bids = [] # Resetting for next step
@@ -89,6 +91,9 @@ class EarlyBidder(Bidder):
         # Initialise the parent class with required parameters
         super().__init__(unique_id, model, auctioneer, maxBid, valuation, watchProba, bidProba)
 
+    def __str__(self) -> str:
+        return "EarlyBidder"
+
     def step(self):
         secondHighestBid = self.auctioneer.getSecondHighestBid()
         prob_watch = np.random.uniform()
@@ -117,8 +122,8 @@ class SniperBidder(Bidder):
         self.currentTime: int = 1 # To be incremented at each step
         self.bidAverage: float = 0
 
-    def newBid(self):
-        self.auctioneer.getSecondHighestBid()
+    def __str__(self):
+        return "SniperBidder"
 
     def step(self):
         prob_watch = np.random.uniform()
