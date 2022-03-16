@@ -36,4 +36,4 @@ for i in range(len(br_df["Data Collector"])):
         i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
         br_step_data = br_step_data.append(i_run_data, ignore_index=True)
         
-br_step_data.to_csv("data/results_legacy_no_bid_increase.csv")
+br_step_data.to_csv("data/results_legacy_no_bidincrease_sniper_no_watchproba.csv")
