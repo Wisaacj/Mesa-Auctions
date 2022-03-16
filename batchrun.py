@@ -17,7 +17,7 @@ params = {
 br = BatchRunner(
     AuctionHouse,
     fixed_parameters=params,
-    iterations=100,
+    iterations=10000,
     max_steps=100,
     model_reporters={"Data Collector": lambda m: m.datacollector},
 )
@@ -31,4 +31,4 @@ for i in range(len(br_df["Data Collector"])):
         i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
         br_step_data = br_step_data.append(i_run_data, ignore_index=True)
         
-br_step_data.to_csv("results_legacy_bidincrease_small.csv")
+br_step_data.to_csv("results_legacy_bidincrease_sniper_no_watchproba.csv")
