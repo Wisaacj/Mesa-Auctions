@@ -38,6 +38,6 @@ chart_element = ChartModule([
 server = ModularServer(
     AuctionHouse,
     [chart_element],
-    "Second-Price Auction Model with conventional bidders and 'sniper' bidders",
+    "Second-Price Auction Model",
     model_params=model_params
 )
