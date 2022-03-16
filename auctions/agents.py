@@ -10,41 +10,15 @@ class Auctioneer(Agent):
         super().__init__(unique_id, model)
         self.bidHistory: list = [] # List of tuples, e.g., (Agent, valuation): (Bidder, int)
         self.bids: list = [] # List to hold bids sent by agents _during_ a step
-        self.averageBidIncrease = 0
 
     def __str__(self):
         return "Auctioneer"
 
     def step(self):
-        self.bidIncrease() # calculate new bid increase
         self.bidHistory += self.bids
         self.bidHistory = self.sortBids()
         # print(f'Second Highest Bid: {self.getSecondHighestBid()}')
         self.bids = [] # Resetting for next step
-
-    def bidIncrease(self):
-        #  if first bid(s) to be added
-        if len(self.bids) !=0:
-            if len(self.bidHistory) == 0:
-                if (len(self.bids) < 1): # if first and unique, average bid increase is the new bid
-                    self.averageBidIncrease = self.bids
-                else: # if first and non- unique add first one then calculate average increment
-                    self.averageBidIncrease = self.bids[0][1]
-                    for i in range (1, len(self.bids)):
-                         self.averageBidIncrease *= i
-                         self.averageBidIncrease = abs(self.averageBidIncrease - self.bids[i][1])
-                         self.averageBidIncrease /= i+1 
-            else: # case for elements already added
-                if (len(self.bids) < 1): # case that only one new bid id added
-                    self.averageBidIncrease *= len(self.bidHistory)
-                    self.averageBidIncrease = abs(self.averageBidIncrease - self.bids[0][1])
-                    self.averageBidIncrease /=  len(self.bidHistory)+1
-                else: # case that muktiple new bids are added 
-                    for i in range (len(self.bids)):
-                         self.averageBidIncrease *= (i + len(self.bidHistory)) 
-                         self.averageBidIncrease = abs(self.averageBidIncrease - self.bids[i][1])
-                         self.averageBidIncrease /= (i + len(self.bidHistory)+1)
-
 
     def sortBids(self) -> list:
         # Sorted by second item in each tuple (in descending order)
@@ -74,9 +48,6 @@ class Auctioneer(Agent):
 
         return self.bidHistory[1][0]
 
-    def getBidIncreaseAverage(self) -> int:
-        return self.averageBidIncrease
-
 """
 Properties of bidder classes:
 - maxBid: L (from research paper)
@@ -91,7 +62,7 @@ class EarlyBidder(Bidder):
         # Initialise the parent class with required parameters
         super().__init__(unique_id, model, auctioneer, maxBid, valuation, watchProba, bidProba)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return "EarlyBidder"
 
     def step(self):
@@ -120,21 +91,25 @@ class SniperBidder(Bidder):
         self.bidTimeframe: int = bidTimeframe # Snipers only bid when currentTime is within the final bidTimeframe steps of the auctions
         self.auctionLength: int = auctionLength
         self.currentTime: int = 1 # To be incremented at each step
-        self.bidAverage: float = 0
 
     def __str__(self):
         return "SniperBidder"
 
     def step(self):
-        if (self.auctionLength - self.currentTime < self.bidTimeframe):
-            # Final bidTimeframe steps of the auction (snipers activated)
-            if (self.valuation < self.auctioneer.getSecondHighestBid()):
-                self.valuation = min(self.auctioneer.getSecondHighestBid() + self.auctioneer.getBidIncreaseAverage() + 5, self.maxBid) # Update private valuation based on previous bid increases
-                # Generate probability (from uniform distribution)
-                proba = np.random.uniform()
-                if (proba < self.bidProba):
-                    # Submit bid if probability < bidProba
-                    self.auctioneer.bids.append((self, self.valuation))
-                    # print(f'Submitting bid: {self.valuation} (sniper bidder)')
+        prob_watch = np.random.uniform()
+        # Check current price with probability = self.watchProba
+        if (prob_watch < self.watchProba):
+            if (self.auctionLength - self.currentTime < self.bidTimeframe):
+                # Final bidTimeframe steps of the auction (snipers activated)
+                if (self.valuation < self.auctioneer.getSecondHighestBid()):
+                    scalar = np.random.uniform(1.0, 2.0)
+                    # Update private valuation (by multiplying by scalar drawn from uniform distribution) note this distribution has a larger range than the one used for EarlyBidder
+                    self.valuation = min(self.auctioneer.getSecondHighestBid() * scalar, self.maxBid) # Update private valuation
+                    # Generate probability (from uniform distribution)
+                    proba = np.random.uniform()
+                    if (proba < self.bidProba):
+                        # Submit bid if probability < bidProba
+                        self.auctioneer.bids.append((self, self.valuation))
+                        # print(f'Submitting bid: {self.valuation} (sniper bidder)')
 
         self.currentTime += 1

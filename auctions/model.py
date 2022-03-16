@@ -53,7 +53,7 @@ class AuctionHouse(Model):
         # Creating auctioneer agent
         self.auctioneer: Agent = Auctioneer(0, self)
         self.schedule.add(self.auctioneer)
-        print("INITIALISING\nAgent: 0 ::: Auctioneer")
+        # print("INITIALISING\nAgent: 0 ::: Auctioneer")
 
         # Creating early bidder agents
         for i in range(self.earlyBidders):
@@ -62,7 +62,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent: {i+1} ::: EarlyBidder')
+            # print(f'Agent: {i+1} ::: EarlyBidder')
             a = EarlyBidder(i+1, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba)
             self.schedule.add(a)
 
@@ -73,7 +73,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent: {i+1+self.earlyBidders} ::: SniperBidder')
+            # print(f'Agent: {i+1+self.earlyBidders} ::: SniperBidder')
             a = SniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)
             self.schedule.add(a)
 
