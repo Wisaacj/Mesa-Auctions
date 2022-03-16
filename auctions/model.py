@@ -13,7 +13,7 @@ def getHighestBidder(model) -> str:
     return str(model.auctioneer.getHighestBidder())
 
 def getSecondHighestBid(model) -> int:
-    return model.auctioneer.getSecondHighestBid()
+    return model.auctioneer.getSecondHighestBid() 
 
 def getSecondHighestBidder(model) -> str:
     return str(model.auctioneer.getSecondHighestBidder())
