@@ -4,6 +4,11 @@ from auctions.agents import Auctioneer, EarlyBidder, SniperBidder
 from auctions.model import AuctionHouse
 import pandas as pd
 
+"""
+When running batch-run, comment out all print statements in model.py and agents.py
+as this will drastically reduce the computation time.
+"""
+
 params = {
     "snipers": 3,
     "earlyBidders": 7,
@@ -31,4 +36,4 @@ for i in range(len(br_df["Data Collector"])):
         i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
         br_step_data = br_step_data.append(i_run_data, ignore_index=True)
         
-br_step_data.to_csv("data/results_legacy_bidincrease_sniper_no_watchproba.csv")
+br_step_data.to_csv("data/results_legacy_no_bidincrease_sniper_no_watchproba.csv")
