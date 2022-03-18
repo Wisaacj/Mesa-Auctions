@@ -40,3 +40,9 @@ The different agents utilise different private valuation update functions:
      + min(self.valuation * scalar, self.maxBid)
 3. Intelligent SniperBidder bids are updated by the average bid increase (observed over the whole auciton)
      + min(self.auctioneer.getSecondHighestBid() + self.auctioneer.getBidIncreaseAverage() + 5, self.maxBid)
+
+The python file "alternate_agents.py" contains the original naive SniperBidder agent and the corresponding Auctioneer agent which interacts with it.
+
+## Running our model
+
+Install mesa with `pip install mesa`. Run the webserver visualtion with `python run.py` or create a batch dataset with `python batch-run.py`.
