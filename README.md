@@ -10,7 +10,7 @@ We aim to investigate various bidding strategies in a second-price auction syste
 
 > analysis - Data analysis notebooks used in the hypothesis analysis section of the report
 
-> auctions - Agent-based model of second price auctions
+> auctions - Agent-based model of second price auctions (see model design)
 
 > data - All datasets used for data analysis
 
@@ -18,9 +18,16 @@ We aim to investigate various bidding strategies in a second-price auction syste
 
 ## Model Design
 
+``` python
+from auctions.model import AuctionHouse
+from auctions.bidder import Bidder
+from auctions.agents import Auctioneer, EarlyBidder, SniperBidder
+from auctions.alternate_agents import AAuctioneer, ASniperBidder
+```
+
 `AuctionHouse` is the overarching model, initialising the `Auctioneer`, `EarlyBidder`, `SniperBidder` agents. It contains a `DataCollector` object which (as the name implies) collects metrics about the model and the agents throughout the simulation, as well as a `RandomActivationByType` object which calls agents' logic function in a stratified random order at each timestep.
 
-Each agent has internal properties which are intialised as follows:
+Each agent inherits from the Bidder class, which is a generic bidding agent that initialises internal properties. These properties are intialised as follows in `AuctionHouse` when agents are generated:
 
 1. maxBid drawn from a normal distribution with mean = 1000, standard deviation = (user inputted)
 2. valuation drawn from a normal distribution with mean = 500, standard deviation = (user inputted)
