@@ -1,8 +1,14 @@
-# Second price online auction
+# ABM: Second-Price Auctions
 
 ## Repository Architecture
 
+> root - Contains run.py and batch-run.py for running the webserver visualisation / generating datasets respectively
 
+> analysis - Contains data analysis notebooks used for the hypothesis analysis section of the report
+
+> auctions - Contains the whole agent-based model of second price auctions
+
+> images - Contains images used in the report
 
 ## Model Design
 
