@@ -10,7 +10,7 @@ as this will drastically reduce the computation time.
 """
 
 params = {
-    "snipers": 3,
+    "snipers": 7,
     "earlyBidders": 7,
     "maxValueStandardDeviation": 250,
     "bidProba": 0.75,
@@ -36,4 +36,4 @@ for i in range(len(br_df["Data Collector"])):
         i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
         br_step_data = br_step_data.append(i_run_data, ignore_index=True)
         
-br_step_data.to_csv("data/results_legacy_no_bidincrease_sniper_no_watchproba.csv")
+br_step_data.to_csv("data/same_sniper_early_bid increase.csv")
