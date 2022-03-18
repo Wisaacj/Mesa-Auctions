@@ -1,4 +1,5 @@
 from auctions.agents import Auctioneer, EarlyBidder, SniperBidder
+from auctions.alternate_agents import AAuctioneer, ASniperBidder
 from auctions.bidder import Bidder
 from mesa import Model, Agent
 from mesa.datacollection import DataCollector
@@ -51,9 +52,9 @@ class AuctionHouse(Model):
         """
 
         # Creating auctioneer agent
-        self.auctioneer: Agent = Auctioneer(0, self)
+        self.auctioneer: Agent = AAuctioneer(0, self)
         self.schedule.add(self.auctioneer)
-        print("INITIALISING\nAgent: 0 ::: Auctioneer")
+        # print("INITIALISING\nAgent: 0 ::: Auctioneer")
 
         # Creating early bidder agents
         for i in range(self.earlyBidders):
@@ -62,7 +63,7 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent: {i+1} ::: EarlyBidder')
+            # print(f'Agent: {i+1} ::: EarlyBidder')
             a = EarlyBidder(i+1, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba)
             self.schedule.add(a)
 
@@ -73,8 +74,8 @@ class AuctionHouse(Model):
             # Generating normally-distributed private valuation with mean = 500
             valuation = np.random.normal(500, self.maxValueStandardDeviation)
 
-            print(f'Agent: {i+1+self.earlyBidders} ::: SniperBidder')
-            a = SniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)
+            # print(f'Agent: {i+1+self.earlyBidders} ::: SniperBidder')
+            a = ASniperBidder(i+1+self.earlyBidders, self, self.auctioneer, maxBid, valuation, self.watchProba, self.bidProba, self.bidTimeframe, self.auctionLength)
             self.schedule.add(a)
 
         self.running: bool = True
@@ -83,9 +84,9 @@ class AuctionHouse(Model):
     def step(self):
         # Tell all bidding agents to run their step function
         self.schedule.step_type(EarlyBidder)
-        self.schedule.step_type(SniperBidder)
+        self.schedule.step_type(ASniperBidder)
         # Tell auctioneer to run its step function
-        self.schedule.step_type(Auctioneer)
+        self.schedule.step_type(AAuctioneer)
         # Collect data
         self.datacollector.collect(self)
         # Manual override (as run_model() is not being called)
