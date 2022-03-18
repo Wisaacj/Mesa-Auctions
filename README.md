@@ -18,11 +18,18 @@ We aim to investigate various bidding strategies in a second-price auction syste
 
 ## Model Design
 
+`AuctionHouse` is the overarching model, initialising the `Auctioneer`, `EarlyBidder`, `SniperBidder` agents. It contains a `DataCollector` object which (as the name implies) collects metrics about the model and the agents throughout the simulation, as well as a `RandomActivationByType` object which calls agents' logic function in a stratified random order at each timestep.
+
+Each agent has internal properties which are intialised as follows:
+
 1. maxBid drawn from a normal distribution with mean = 1000, standard deviation = (user inputted)
 2. valuation drawn from a normal distribution with mean = 500, standard deviation = (user inputted)
-3. EarlyBidder bids are updated by a scalar factor drawn from uniform distribution [1.0, 1.2]
+
+The different agents utilise different private valuation update functions:
+
+1. EarlyBidder bids are updated by a scalar factor drawn from uniform distribution [1.0, 1.2]
      + min(self.valuation * scalar, self.valuation)
-4. Naive SniperBidder bids are updated by a scalar factor drawn from uniform distribution [1.0, 2.0]
+2. Naive SniperBidder bids are updated by a scalar factor drawn from uniform distribution [1.0, 2.0]
      + min(self.valuation * scalar, self.maxBid)
-5. Intelligent SniperBidder bids are updated by the average bid increase (observed over the whole auciton)
+3. Intelligent SniperBidder bids are updated by the average bid increase (observed over the whole auciton)
      + min(self.auctioneer.getSecondHighestBid() + self.auctioneer.getBidIncreaseAverage() + 5, self.maxBid)

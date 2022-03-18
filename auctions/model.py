@@ -52,7 +52,7 @@ class AuctionHouse(Model):
         """
 
         # Creating auctioneer agent
-        self.auctioneer: Agent = AAuctioneer(0, self)
+        self.auctioneer: Agent = Auctioneer(0, self)
         self.schedule.add(self.auctioneer)
         # print("INITIALISING\nAgent: 0 ::: Auctioneer")
 
@@ -84,9 +84,9 @@ class AuctionHouse(Model):
     def step(self):
         # Tell all bidding agents to run their step function
         self.schedule.step_type(EarlyBidder)
-        self.schedule.step_type(ASniperBidder)
+        self.schedule.step_type(SniperBidder)
         # Tell auctioneer to run its step function
-        self.schedule.step_type(AAuctioneer)
+        self.schedule.step_type(Auctioneer)
         # Collect data
         self.datacollector.collect(self)
         # Manual override (as run_model() is not being called)

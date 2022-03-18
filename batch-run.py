@@ -7,6 +7,8 @@ import pandas as pd
 """
 When running batch-run, comment out all print statements in model.py and agents.py
 as this will drastically reduce the computation time.
+
+This program is used to generate the datasets used for analysis.
 """
 
 params = {
